@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凡人修仙传 - 仙缘大陆</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+/* ========== CSS Variables & Reset ========== */
+:root {
+  --bg-deep: #0a0a12;
+  --bg-dark: #111122;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #222244;
+  --gold: #ffd700;
+  --gold-dark: #b8860b;
+  --gold-glow: rgba(255, 215, 0, 0.3);
+  --purple: #9b59b6;
+  --purple-light: #c39bd3;
+  --purple-dark: #6c3483;
+  --green: #2ecc71;
+  --green-dark: #1a9c54;
+  --cyan: #00d4ff;
+  --red: #e74c3c;
+  --text: #e8e8e8;
+  --text-dim: #a0a0b0;
+  --text-muted: #666680;
+  --border: rgba(255, 215, 0, 0.15);
+  --border-bright: rgba(255, 215, 0, 0.4);
+  --shadow-gold: 0 0 20px rgba(255, 215, 0, 0.15);
+  --shadow-purple: 0 0 30px rgba(155, 89, 182, 0.2);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--purple-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--purple); }
+
+/* ========== Utility ========== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--gold), var(--purple-light), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.section-sub {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-bottom: 48px;
+  letter-spacing: 2px;
+}
+.section { padding: 80px 0; position: relative; }
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.gold-text { color: var(--gold); }
+.purple-text { color: var(--purple-light); }
+.green-text { color: var(--green); }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 10, 18, 0.85);
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-size: 1.4rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold), var(--purple-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: pointer;
+}
+.nav-links { display: flex; gap: 8px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--gold);
+  background: rgba(255, 215, 0, 0.08);
+}
+.nav-toggle { display: none; background: none; border: none; color: var(--gold); font-size: 1.5rem; cursor: pointer; }
+
+/* ========== Hero ========== */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  animation: heroFadeIn 1.5s ease-out;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--gold), #fff, var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.3));
+}
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  letter-spacing: 4px;
+}
+.hero-btn {
+  display: inline-block;
+  padding: 14px 48px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-family: inherit;
+  transition: var(--transition);
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+.hero-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.15), transparent);
+  transition: left 0.6s;
+}
+.hero-btn:hover::before { left: 100%; }
+.hero-btn:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: var(--shadow-gold);
+  transform: scale(1.05);
+}
+
+/* ========== World Map ========== */
+.map-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.region-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.region-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--purple), var(--gold));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.region-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow-gold);
+}
+.region-card:hover::before { opacity: 1; }
+.region-card .emoji { font-size: 2rem; margin-bottom: 12px; display: block; }
+.region-card h3 {
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.region-card p { color: var(--text-dim); font-size: 0.95rem; }
+.region-card .tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--purple);
+  color: var(--purple-light);
+}
+
+/* ========== Realm System ========== */
+.realm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.realm-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.realm-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-purple);
+}
+.realm-card .level {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold), var(--purple-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.realm-card h3 {
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin: 8px 0;
+}
+.realm-card .meta {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.realm-card .feature {
+  font-size: 0.9rem;
+  color: var(--purple-light);
+}
+.realm-card .qi-ring {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  transition: var(--transition);
+}
+.realm-card:hover .qi-ring {
+  bottom: -20px;
+  opacity: 0.3;
+  animation: qiSpin 4s linear infinite;
+}
+@keyframes qiSpin { to { transform: translateX(-50%) rotate(360deg); } }
+
+/* ========== Characters ========== */
+.char-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.char-tab {
+  padding: 10px 24px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.char-tab.active, .char-tab:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(255, 215, 0, 0.08);
+}
+.char-panel {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+.char-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.char-profile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+.char-profile::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(155,89,182,0.15), transparent);
+  border-radius: 50%;
+}
+.char-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-dark), var(--gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin: 0 auto 20px;
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 20px rgba(255,215,0,0.2);
+}
+.char-name {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.char-title {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--purple-light);
+  margin-bottom: 24px;
+}
+.char-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.char-stat {
+  background: rgba(255,255,255,0.03);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 3px solid var(--purple);
+}
+.char-stat .label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+.char-stat .value { font-size: 1rem; color: var(--text); }
+.char-desc {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+.char-treasures {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.char-treasure {
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  color: var(--gold);
+}
+
+/* ========== Treasures ========== */
+.treasure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.treasure-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: var(--transition);
+  perspective: 1000px;
+  cursor: pointer;
+}
+.treasure-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 40px rgba(155, 89, 182, 0.15);
+  border-color: var(--purple);
+}
+.treasure-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.treasure-card h3 {
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.treasure-grade {
+  font-size: 0.85rem;
+  color: var(--purple-light);
+  margin-bottom: 12px;
+}
+.treasure-stars { margin-bottom: 12px; }
+.treasure-stars span { color: var(--gold); font-size: 1.1rem; }
+.treasure-desc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.treasure-bond {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(155,89,182,0.08);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--purple-light);
+}
+
+/* ========== Timeline ========== */
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--gold), var(--purple), var(--gold));
+  transform: translateX(-50%);
+}
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  position: relative;
+}
+.timeline-item:nth-child(odd) { flex-direction: row; }
+.timeline-item:nth-child(even) { flex-direction: row-reverse; }
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 3px solid var(--bg-deep);
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(255,215,0,0.4);
+}
+.timeline-content {
+  width: 45%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: var(--transition);
+}
+.timeline-content:hover {
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow-gold);
+}
+.timeline-content .vol {
+  font-size: 0.8rem;
+  color: var(--purple-light);
+  margin-bottom: 4px;
+}
+.timeline-content h3 {
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.timeline-content p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.timeline-content .milestone {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  border-radius: 20px;
+  background: rgba(46,204,113,0.1);
+  border: 1px solid rgba(46,204,113,0.3);
+  color: var(--green);
+}
+
+/* ========== Herb Encyclopedia ========== */
+.herb-filters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.herb-filter {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.herb-filter.active, .herb-filter:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(46,204,113,0.08);
+}
+.herb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.herb-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.herb-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: var(--green-dark);
+  box-shadow: 0 0 20px rgba(46,204,113,0.15);
+}
+.herb-emoji { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.herb-card h4 {
+  font-size: 1.1rem;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.herb-card .rarity {
+  margin: 8px 0;
+  color: var(--gold);
+  font-size: 1rem;
+}
+.herb-card .effect {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.herb-card .location {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ========== Auction ========== */
+.auction-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.auction-table th {
+  background: rgba(255,215,0,0.05);
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+.auction-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.auction-table tr:hover td { background: rgba(255,215,0,0.02); }
+.auction-table .price { color: var(--gold); font-weight: 700; }
+.auction-table .hot { color: var(--red); }
+.auction-balance {
+  text-align: right;
+  margin-top: 16px;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+
+/* ========== Achievement ========== */
+.achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.achieve-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.achieve-card:hover {
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow-gold);
+}
+.achieve-card .achieve-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+.achieve-card h4 {
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.achieve-card .achieve-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.achieve-progress {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.achieve-progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  transition: width 1s ease;
+}
+.achieve-progress-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+.achieve-reward {
+  margin-top: 12px;
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  border-radius: 20px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  color: var(--gold);
+}
+
+/* ========== Titles ========== */
+.title-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.title-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  transition: var(--transition);
+}
+.title-card:hover {
+  transform: scale(1.05);
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+}
+.title-card .title-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.title-card .title-condition {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.title-card .title-bonus {
+  font-size: 0.85rem;
+  color: var(--green);
+}
+
+/* ========== Social / Chat ========== */
+.chat-demo {
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.chat-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-header span { color: var(--gold); font-weight: 700; }
+.chat-body {
+  padding: 24px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.chat-msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.chat-msg.self { flex-direction: row-reverse; }
+.chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-dark), var(--gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.chat-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.chat-msg:not(.self) .chat-bubble {
+  background: rgba(155,89,182,0.1);
+  border: 1px solid rgba(155,89,182,0.15);
+  border-top-left-radius: 4px;
+  color: var(--text);
+}
+.chat-msg.self .chat-bubble {
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-top-right-radius: 4px;
+  color: var(--text);
+}
+.chat-input {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+}
+.chat-input input {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 10px 20px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+.chat-input input:focus { border-color: var(--gold); }
+.chat-input button {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border: none;
+  border-radius: 50px;
+  padding: 10px 24px;
+  color: var(--bg-deep);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.chat-input button:hover { transform: scale(1.05); box-shadow: var(--shadow-gold); }
+
+/* ========== Quotes ========== */
+.quote-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.quote-section::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 30px;
+  font-size: 8rem;
+  color: rgba(255,215,0,0.06);
+  font-family: serif;
+}
+.quote-text {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text);
+  line-height: 2;
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+.quote-author {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+/* ========== Bonds ========== */
+.bond-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.bond-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: var(--transition);
+}
+.bond-card:hover {
+  border-color: var(--purple);
+  box-shadow: var(--shadow-purple);
+}
+.bond-card h4 {
+  color: var(--gold);
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.bond-card .condition {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.bond-card .effect {
+  font-size: 0.9rem;
+  color: var(--green);
+}
+
+/* ========== Five Elements ========== */
+.elements-wheel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+.element-card {
+  width: 180px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  transition: var(--transition);
+}
+.element-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px rgba(155,89,182,0.15);
+}
+.element-card .el-icon { font-size: 2.5rem; margin-bottom: 8px; display: block; }
+.element-card h4 { color: var(--gold); margin-bottom: 4px; }
+.element-card .el-desc { font-size: 0.8rem; color: var(--text-dim); }
+
+/* ========== Sects ========== */
+.sect-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.sect-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.sect-card:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-4px);
+}
+.sect-card h3 {
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.sect-card .sect-info { margin-bottom: 12px; }
+.sect-card .sect-info div {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.sect-card .sect-info .label { color: var(--purple-light); }
+
+/* ========== Rank ========== */
+.rank-list { max-width: 600px; margin: 0 auto; }
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  transition: var(--transition);
+}
+.rank-item:hover {
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow-gold);
+}
+.rank-num {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--gold);
+  width: 40px;
+  text-align: center;
+}
+.rank-item:nth-child(1) .rank-num { color: #ffd700; }
+.rank-item:nth-child(2) .rank-num { color: #c0c0c0; }
+.rank-item:nth-child(3) .rank-num { color: #cd7f32; }
+.rank-info { flex: 1; }
+.rank-name { font-size: 1.05rem; color: var(--text); font-weight: 700; }
+.rank-realm { font-size: 0.85rem; color: var(--purple-light); }
+.rank-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rank-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--purple), var(--gold));
+  transition: width 1.5s ease;
+}
+.rank-pct { font-size: 0.85rem; color: var(--gold); width: 50px; text-align: right; }
+
+/* ========== Forge ========== */
+.forge-steps {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.forge-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 200px;
+  text-align: center;
+  position: relative;
+  transition: var(--transition);
+}
+.forge-step:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+}
+.forge-step .step-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.forge-step h4 { color: var(--gold); margin-bottom: 4px; }
+.forge-step p { font-size: 0.85rem; color: var(--text-dim); }
+.forge-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--gold);
+  font-size: 1.5rem;
+}
+
+/* ========== Footer ========== */
+.footer {
+  padding: 48px 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.footer a { color: var(--purple-light); text-decoration: none; }
+
+/* ========== Scroll Animations ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,18,0.95);
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-toggle { display: block; }
+  .section { padding: 48px 0; }
+  .section-title { font-size: 1.6rem; }
+  .timeline::before { left: 20px; }
+  .timeline-item, .timeline-item:nth-child(even) { flex-direction: row; padding-left: 48px; }
+  .timeline-dot { left: 20px; }
+  .timeline-content { width: 100%; }
+  .char-stats { grid-template-columns: 1fr; }
+  .quote-section { padding: 32px 20px; }
+  .hero-title { font-size: 2.2rem; }
+  .forge-steps { flex-direction: column; align-items: center; }
+  .forge-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== Navigation ========== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">⚔️ 凡人修仙传</div>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">首页</a></li>
+      <li><a href="#world">世界观</a></li>
+      <li><a href="#realms">境界</a></li>
+      <li><a href="#characters">角色</a></li>
+      <li><a href="#treasures">法宝</a></li>
+      <li><a href="#timeline">故事线</a></li>
+      <li><a href="#herbs">灵药</a></li>
+      <li><a href="#auction">拍卖行</a></li>
+      <li><a href="#achievements">成就</a></li>
+      <li><a href="#social">仙友</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== Hero ========== -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <h1 class="hero-title">凡人修仙传</h1>
+    <p class="hero-sub">仙 缘 大 陆 · 逆 天 改 命</p>
+    <a href="#world" class="hero-btn">踏入修仙之路</a>
+  </div>
+</section>
+
+<!-- ========== World ========== -->
+<section id="world" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">🗺️ 仙缘大陆</h2>
+    <p class="section-sub reveal">灵气复苏 · 修仙问道 · 万族并立</p>
+    <div class="map-container">
+      <div class="region-card reveal">
+        <span class="emoji">🌊</span>
+        <h3>乱星海</h3>
+        <p>韩立最初踏入修仙之路的起点，妖兽资源丰富，海域辽阔，暗流涌动。</p>
+        <span class="tag">起点之地</span>
+      </div>
+      <div class="region-card reveal">
+        <span class="emoji">🌸</span>
+        <h3>天南地区</h3>
+        <p>人界修仙界最繁荣的核心区域，包含越京、燕家堡、掩月宗等重要地点。</p>
+        <span class="tag">核心区域</span>
+      </div>
+      <div class="region-card reveal">
+        <span class="emoji">🏰</span>
+        <h3>虚天殿</h3>
+        <p>乱星海最大修仙宗门遗址，内藏虚天鼎与乾蓝冰焰，逆星盟所在。</p>
+        <span class="tag">上古遗迹</span>
+      </div>
+      <div class="region-card reveal">
+        <span class="emoji">⛰️</span>
+        <h3>昆吾山</h3>
+        <p>远古修仙遗址，群修争夺古宝之地，危机四伏。</p>
+        <span class="tag">远古秘境</span>
+      </div>
+      <div class="region-card reveal">
+        <span class="emoji">🌫️</span>
+        <h3>鬼雾海域</h3>
+        <p>神秘危险的海域，鬼雾出没，修士陨落之地。</p>
+        <span class="tag">险地</span>
+      </div>
+      <div class="region-card reveal">
+        <span class="emoji">🌿</span>
+        <h3>血色禁地</h3>
+        <p>十年一开的大型禁地，筑基以下方可进入，暗藏掌天瓶。</p>
+        <span class="tag">十年一开</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Realms ========== -->
+<section id="realms" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">⚡ 九层境界</h2>
+    <p class="section-sub reveal">引气入体 · 逆天而行 · 大道无尽</p>
+    <div class="realm-grid">
+      <div class="realm-card reveal">
+        <div class="level">一</div>
+        <h3>炼气期</h3>
+        <div class="meta">寿命 150-200年</div>
+        <div class="feature">引气入体 · 锤炼肉身</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">二</div>
+        <h3>筑基期</h3>
+        <div class="meta">寿命 300-500年</div>
+        <div class="feature">丹田气海 · 灵气化液</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">三</div>
+        <h3>金丹期</h3>
+        <div class="meta">寿命 800-1000年</div>
+        <div class="feature">金丹大成 · 法力凝聚</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">四</div>
+        <h3>元婴期</h3>
+        <div class="meta">寿命 2000-3000年</div>
+        <div class="feature">元婴出窍 · 可夺舍</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">五</div>
+        <h3>化神期</h3>
+        <div class="meta">寿命 5000-8000年</div>
+        <div class="feature">神念化形 · 沟通天地</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">六</div>
+        <h3>炼虚期</h3>
+        <div class="meta">寿命万年以上</div>
+        <div class="feature">身化万千 · 领悟法则</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">七</div>
+        <h3>合体期</h3>
+        <div class="meta">寿命数万年</div>
+        <div class="feature">身合大道 · 人法合一</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">八</div>
+        <h3>大乘期</h3>
+        <div class="meta">寿命十万年</div>
+        <div class="feature">半仙之体 · 可飞升</div>
+        <div class="qi-ring"></div>
+      </div>
+      <div class="realm-card reveal">
+        <div class="level">九</div>
+        <h3>渡劫期</h3>
+        <div class="meta">随时天劫</div>
+        <div class="feature">飞升在即 · 承受天劫</div>
+        <div class="qi-ring"></div>
+      </div>
+    </div>
+
+    <!-- Five Elements -->
+    <h3 class="section-title reveal" style="font-size:1.5rem; margin-top:60px;">五行功法</h3>
+    <div class="elements-wheel reveal">
+      <div class="element-card">
+        <span class="el-icon">⚔️</span>
+        <h4>金系</h4>
+        <div class="el-desc">锐金庚金 · 攻击强化 · 飞剑伤害</div>
+      </div>
+      <div class="element-card">
+        <span class="el-icon">🌿</span>
+        <h4>木系</h4>
+        <div class="el-desc">青木灵木 · 生命恢复 · 木系功法</div>
+      </div>
+      <div class="element-card">
+        <span class="el-icon">💧</span>
+        <h4>水系</h4>
+        <div class="el-desc">寒水玄水 · 辅助增益 · 冰系攻击</div>
+      </div>
+      <div class="element-card">
+        <span class="el-icon">🔥</span>
+        <h4>火系</h4>
+        <div class="el-desc">离火真火 · 爆发输出 · 焚化技能</div>
+      </div>
+      <div class="element-card">
+        <span class="el-icon">🏔️</span>
+        <h4>土系</h4>
+        <div class="el-desc">厚土戊土 · 防御强化 · 土遁之术</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Sects ========== -->
+<section id="sects" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">🏛️ 修仙门派</h2>
+    <p class="section-sub reveal">六大势力 · 各据一方</p>
+    <div class="sect-grid">
+      <div class="sect-card reveal">
+        <h3>🗡️ 黄枫谷</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>天南大宗</div>
+          <div><span class="label">镇派功法：</span>青元剑诀</div>
+          <div><span class="label">特色：</span>剑修圣地，韩立入门之宗</div>
+        </div>
+      </div>
+      <div class="sect-card reveal">
+        <h3>🌙 掩月宗</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>天南顶级</div>
+          <div><span class="label">镇派功法：</span>素女轮回功</div>
+          <div><span class="label">特色：</span>以女修为主，媚术精绝</div>
+        </div>
+      </div>
+      <div class="sect-card reveal">
+        <h3>☁️ 落云宗</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>天南大宗</div>
+          <div><span class="label">镇派功法：</span>落云心法</div>
+          <div><span class="label">特色：</span>云系功法，仙气缥缈</div>
+        </div>
+      </div>
+      <div class="sect-card reveal">
+        <h3>⭐ 逆星盟</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>乱星海势力</div>
+          <div><span class="label">镇派功法：</span>各流派兼修</div>
+          <div><span class="label">特色：</span>散修联合，资源争夺</div>
+        </div>
+      </div>
+      <div class="sect-card reveal">
+        <h3>🐺 银月狼族</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>妖族势力</div>
+          <div><span class="label">镇派功法：</span>妖族传承</div>
+          <div><span class="label">特色：</span>银月血脉，妖修之路</div>
+        </div>
+      </div>
+      <div class="sect-card reveal">
+        <h3>👻 夜叉族</h3>
+        <div class="sect-info">
+          <div><span class="label">定位：</span>外族势力</div>
+          <div><span class="label">镇派功法：</span>夜叉神通</div>
+          <div><span class="label">特色：</span>灵界异族，敌对势力</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Characters ========== -->
+<section id="characters" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">👥 核心角色</h2>
+    <p class="section-sub reveal">凡人之路 · 各有因缘</p>
+    <div class="char-tabs reveal">
+      <button class="char-tab active" data-tab="hanli">韩立</button>
+      <button class="char-tab" data-tab="nanwan">南宫婉</button>
+      <button class="char-tab" data-tab="ziyue">紫灵仙子</button>
+      <button class="char-tab" data-tab="yinyue">银月</button>
+      <button class="char-tab" data-tab="muxue">墨大夫</button>
+      <button class="char-tab" data-tab="xiangzhili">向之礼</button>
+    </div>
+
+    <div class="char-panel active" id="panel-hanli">
+      <div class="char-profile">
+        <div class="char-avatar">⚔️</div>
+        <div class="char-name">韩立</div>
+        <div class="char-title">渡劫期（大乘） · 人界修士 → 灵界飞升 → 仙界</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">功法</div><div class="value">青元剑诀 / 梵圣真魔功</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">谨慎低调 · 谋定后动</div></div>
+          <div class="char-stat"><div class="label">道侣</div><div class="value">南宫婉</div></div>
+          <div class="char-stat"><div class="label">核心法宝</div><div class="value">掌天瓶</div></div>
+        </div>
+        <div class="char-desc">
+          凡人出身，凭借变异木属性天灵根踏上修仙之路。为人谨慎低调，谋定后动，凭借掌天瓶在修仙路上步步为营，逆天改命。从人界一步步修炼至飞升灵界，最终踏入仙界，完成凡人逆天的传奇。
+        </div>
+        <div class="char-treasures">
+          <span class="char-treasure">掌天瓶</span>
+          <span class="char-treasure">青竹蜂云剑</span>
+          <span class="char-treasure">虚天鼎</span>
+          <span class="char-treasure">玄天斩灵剑</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="char-panel" id="panel-nanwan">
+      <div class="char-profile">
+        <div class="char-avatar">🌙</div>
+        <div class="char-name">南宫婉</div>
+        <div class="char-title">元婴期 · 掩月宗弟子/长老 · 轮回殿主</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">功法</div><div class="value">素女轮回功</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">绝色美女 · 双修之术</div></div>
+          <div class="char-stat"><div class="label">与韩立</div><div class="value">道侣关系</div></div>
+          <div class="char-stat"><div class="label">宗门</div><div class="value">掩月宗</div></div>
+        </div>
+        <div class="char-desc">
+          掩月宗绝色女修，修炼素女轮回功，与韩立结为道侣。身份高贵，修为精深，是韩立修仙路上最重要的伴侣之一。"轮回尽头，你我终会相见。"
+        </div>
+      </div>
+    </div>
+
+    <div class="char-panel" id="panel-ziyue">
+      <div class="char-profile">
+        <div class="char-avatar">✨</div>
+        <div class="char-name">紫灵仙子</div>
+        <div class="char-title">炼虚期 · 银月狼族（半妖） · 红颜知己</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">功法</div><div class="value">天魔媚功</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">绝美容颜 · 歌舞双绝</div></div>
+          <div class="char-stat"><div class="label">种族</div><div class="value">半妖</div></div>
+          <div class="char-stat"><div class="label">与韩立</div><div class="value">红颜知己</div></div>
+        </div>
+        <div class="char-desc">
+          绝美容颜，歌舞双绝，修炼天魔媚功。与韩立是红颜知己，共同经历诸多风雨。半妖之身，天赋异禀，在修仙界中亦是一方强者。
+        </div>
+      </div>
+    </div>
+
+    <div class="char-panel" id="panel-yinyue">
+      <div class="char-profile">
+        <div class="char-avatar">🐺</div>
+        <div class="char-name">银月</div>
+        <div class="char-title">化神期 · 银月狼族妖修 · 灵宠伙伴</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">种族</div><div class="value">银月狼族（妖修）</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">化身少女 · 记忆残缺</div></div>
+          <div class="char-stat"><div class="label">祖父</div><div class="value">敖啸（大乘期）</div></div>
+          <div class="char-stat"><div class="label">法宝</div><div class="value">银月弯刀</div></div>
+        </div>
+        <div class="char-desc">
+          银月狼族公主，记忆残缺，化身少女跟随韩立。与韩立双修，是韩立最忠诚的灵宠伙伴。化形之秘暗藏大能，银月血脉觉醒后实力大增。
+        </div>
+      </div>
+    </div>
+
+    <div class="char-panel" id="panel-muxue">
+      <div class="char-profile">
+        <div class="char-avatar">🧙</div>
+        <div class="char-name">墨大夫</div>
+        <div class="char-title">金丹期 · 越京墨府 · 引路人</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">功法</div><div class="value">长春功</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">老谋深算 · 企图夺舍</div></div>
+          <div class="char-stat"><div class="label">居所</div><div class="value">越京墨府</div></div>
+          <div class="char-stat"><div class="label">与韩立</div><div class="value">师父（亦敌亦友）</div></div>
+        </div>
+        <div class="char-desc">
+          越京墨府主人，金丹期修士。将韩立带入修仙之路，传授长春功。"修仙界弱肉强食，只有活着，才是最大的道理。"
+        </div>
+      </div>
+    </div>
+
+    <div class="char-panel" id="panel-xiangzhili">
+      <div class="char-profile">
+        <div class="char-avatar">🌟</div>
+        <div class="char-name">向之礼</div>
+        <div class="char-title">化神期 · 人界第一修士</div>
+        <div class="char-stats">
+          <div class="char-stat"><div class="label">地位</div><div class="value">人界第一修士</div></div>
+          <div class="char-stat"><div class="label">特点</div><div class="value">化身万修 · 探寻飞升</div></div>
+          <div class="char-stat"><div class="label">境界</div><div class="value">化神期</div></div>
+          <div class="char-stat"><div class="label">目标</div><div class="value">飞升灵界</div></div>
+        </div>
+        <div class="char-desc">
+          人界修仙界第一人，化身万千探寻飞升之路。"飞升之路，万中无一。向某不才，愿为天下修士试一试。"
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Treasures ========== -->
+<section id="treasures" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">⚔️ 至宝法器</h2>
+    <p class="section-sub reveal">先天至宝 · 玄天之宝 · 逆天改命</p>
+    <div class="treasure-grid">
+      <div class="treasure-card reveal">
+        <span class="treasure-icon">🏺</span>
+        <h3>掌天瓶</h3>
+        <div class="treasure-grade">先天至宝 · 时间法则</div>
+        <div class="treasure-stars"><span>★★★★★</span></div>
+        <div class="treasure-desc">
+          又名"小绿瓶"，蕴含时间法则之力，能催熟一切灵药仙草。韩立凭借此宝在修仙路上步步为营，逆天改命。
+        </div>
+        <div class="treasure-bond">🔗 羁绊：先天双生（掌天瓶 + 玄天斩灵剑 → 混沌法则觉醒）</div>
+      </div>
+      <div class="treasure-card reveal">
+        <span class="treasure-icon">⚔️</span>
+        <h3>玄天斩灵剑</h3>
+        <div class="treasure-grade">玄天之宝 · 混沌二宝之一</div>
+        <div class="treasure-stars"><span>★★★★★</span></div>
+        <div class="treasure-desc">
+          斩灵灭仙，混沌二宝之一。与掌天瓶合称先天双生，威力无穷。
+        </div>
+        <div class="treasure-bond">🔗 羁绊：先天双生（与掌天瓶共鸣）</div>
+      </div>
+      <div class="treasure-card reveal">
+        <span class="treasure-icon">🔱</span>
+        <h3>虚天鼎</h3>
+        <div class="treasure-grade">灵宝 · 虚天殿至宝</div>
+        <div class="treasure-stars"><span>★★★★☆</span></div>
+        <div class="treasure-desc">
+          虚天殿至宝，内有乾蓝冰焰。攻防一体，威力强大。
+        </div>
+        <div class="treasure-bond">🔗 羁绊：虚天三宝（虚天鼎 + 乾蓝冰焰 → 冰系攻击强化）</div>
+      </div>
+      <div class="treasure-card reveal">
+        <span class="treasure-icon">🗡️</span>
+        <h3>青竹蜂云剑</h3>
+        <div class="treasure-grade">飞剑 · 108口配套剑阵</div>
+        <div class="treasure-stars"><span>★★★★☆</span></div>
+        <div class="treasure-desc">
+          108口飞剑组成的剑阵，韩立最强攻击手段之一。剑阵一出，天地变色。
+        </div>
+        <div class="treasure-bond">🔗 羁绊：青元剑阵（集齐108口 → 攻击力+300%）</div>
+      </div>
+    </div>
+
+    <!-- Forge System -->
+    <h3 class="section-title reveal" style="font-size:1.5rem; margin-top:60px;">🔧 法宝炼制流程</h3>
+    <div class="forge-steps reveal">
+      <div class="forge-step">
+        <span class="step-icon">💎</span>
+        <h4>材料收集</h4>
+        <p>灵材/矿石 · 妖丹 · 秘境采集</p>
+      </div>
+      <div class="forge-arrow">→</div>
+      <div class="forge-step">
+        <span class="step-icon">🔥</span>
+        <h4>真火锻造</h4>
+        <p>炼器炉台 · 真火炼化</p>
+      </div>
+      <div class="forge-arrow">→</div>
+      <div class="forge-step">
+        <span class="step-icon">👻</span>
+        <h4>器灵注入</h4>
+        <p>精血/神魂 · 器灵觉醒</p>
+      </div>
+      <div class="forge-arrow">→</div>
+      <div class="forge-step">
+        <span class="step-icon">✨</span>
+        <h4>法宝成型</h4>
+        <p>法器→法宝→灵宝→至宝</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Timeline ========== -->
+<section id="timeline" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">📖 十卷故事线</h2>
+    <p class="section-sub reveal">从山村少年到大道无尽</p>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第一卷</div>
+          <h3>山村少年</h3>
+          <p>韩立被墨大夫收徒，修炼长春功，踏入修仙之门。</p>
+          <span class="milestone">凡人 → 炼气期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第二卷</div>
+          <h3>黄枫谷</h3>
+          <p>入门黄枫谷，结识厉飞雨，正式踏上修仙之路。</p>
+          <span class="milestone">炼气期 → 筑基期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第三卷</div>
+          <h3>血色禁地</h3>
+          <p>十年一开的禁地冒险，获得掌天瓶，命运由此改变。</p>
+          <span class="milestone">筑基期 · 获掌天瓶</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第四卷</div>
+          <h3>天南风云</h3>
+          <p>越京风云，燕家堡夺宝，逐步在修仙界站稳脚跟。</p>
+          <span class="milestone">筑基期 → 金丹期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第五卷</div>
+          <h3>乱星海</h3>
+          <p>乱星海崛起，击杀妖兽，成就一方强者。</p>
+          <span class="milestone">金丹期 → 元婴期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第六卷</div>
+          <h3>虚天殿</h3>
+          <p>虚天殿夺宝，获得虚天鼎，与呼言老道亦敌亦友。</p>
+          <span class="milestone">元婴期 · 获虚天鼎</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第七卷</div>
+          <h3>昆吾山</h3>
+          <p>远古遗迹群修夺宝，实力再次飞跃。</p>
+          <span class="milestone">元婴期 → 化神期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第八卷</div>
+          <h3>飞升灵界</h3>
+          <p>踏入灵界新世界，开始全新的修仙征程。</p>
+          <span class="milestone">化神期 → 炼虚期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第九卷</div>
+          <h3>灵界终章</h3>
+          <p>人族存亡之战，合体期巅峰强者。</p>
+          <span class="milestone">炼虚期 → 合体期</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="vol">第十卷</div>
+          <h3>仙界篇</h3>
+          <p>飞升仙界，大道无尽，凡人终成传说。</p>
+          <span class="milestone">大乘期 → 渡劫期</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quotes -->
+    <div class="quote-section reveal" style="margin-top: 60px;">
+      <div class="quote-text" id="quote-text">
+        "修仙修仙，若是没了那颗向道之心，即使修为再高，也不过是一具行尸走肉。"
+      </div>
+      <div class="quote-author" id="quote-author">— 韩立</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Herbs ========== -->
+<section id="herbs" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">🌿 灵药仙草图鉴</h2>
+    <p class="section-sub reveal">灵草奇花 · 各具功效</p>
+    <div class="herb-filters reveal">
+      <button class="herb-filter active" data-filter="all">全部</button>
+      <button class="herb-filter" data-filter="rare">稀有</button>
+      <button class="herb-filter" data-filter="common">常见</button>
+      <button class="herb-filter" data-filter="legendary">传说</button>
+    </div>
+    <div class="herb-grid" id="herb-grid">
+      <div class="herb-card reveal" data-rarity="rare">
+        <span class="herb-emoji">🌺</span>
+        <h4>霓裳草</h4>
+        <div class="rarity">★★★★★</div>
+        <div class="effect">吸引妖兽</div>
+        <div class="location">📍 乱星海</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="rare">
+        <span class="herb-emoji">🍄</span>
+        <h4>银角芝</h4>
+        <div class="rarity">★★★★</div>
+        <div class="effect">炼制筑基丹</div>
+        <div class="location">📍 各宗门</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="legendary">
+        <span class="herb-emoji">🐉</span>
+        <h4>龙鳞果</h4>
+        <div class="rarity">★★★★★</div>
+        <div class="effect">突破境界</div>
+        <div class="location">📍 昆吾山</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="legendary">
+        <span class="herb-emoji">💊</span>
+        <h4>补天丹</h4>
+        <div class="rarity">★★★★★</div>
+        <div class="effect">改善资质</div>
+        <div class="location">📍 虚天殿</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="rare">
+        <span class="herb-emoji">❄️</span>
+        <h4>万年玄冰</h4>
+        <div class="rarity">★★★★</div>
+        <div class="effect">冰封保存</div>
+        <div class="location">📍 极北之地</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="legendary">
+        <span class="herb-emoji">🌱</span>
+        <h4>九曲灵参</h4>
+        <div class="rarity">★★★★★</div>
+        <div class="effect">炼丹圣药</div>
+        <div class="location">📍 深山秘境</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="common">
+        <span class="herb-emoji">🍃</span>
+        <h4>玉髓芝</h4>
+        <div class="rarity">★★★</div>
+        <div class="effect">常见灵草</div>
+        <div class="location">📍 各地山野</div>
+      </div>
+      <div class="herb-card reveal" data-rarity="rare">
+        <span class="herb-emoji">🌸</span>
+        <h4>紫韵花</h4>
+        <div class="rarity">★★★★</div>
+        <div class="effect">阵法材料</div>
+        <div class="location">📍 掩月宗</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Auction ========== -->
+<section id="auction" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">💰 仙缘拍卖行</h2>
+    <p class="section-sub reveal">竞价夺宝 · 价高者得</p>
+    <div class="reveal">
+      <table class="auction-table">
+        <thead>
+          <tr>
+            <th>物品名称</th>
+            <th>当前价</th>
+            <th>剩余时间</th>
+            <th>竞拍次数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>银角芝 ×3</td>
+            <td class="price">500 灵石</td>
+            <td>2:15:30</td>
+            <td>12次竞拍</td>
+          </tr>
+          <tr>
+            <td>青竹蜂云剑(残)</td>
+            <td class="price">8,000 灵石</td>
+            <td>0:05:12</td>
+            <td class="hot">45次竞拍 ⚡</td>
+          </tr>
+          <tr>
+            <td>筑基丹配方</td>
+            <td class="price">2,500 灵石</td>
+            <td>5:42:00</td>
+            <td>8次竞拍</td>
+          </tr>
+          <tr>
+            <td>九曲灵参(百年)</td>
+            <td class="price">12,000 灵石</td>
+            <td>1:20:00</td>
+            <td>23次竞拍</td>
+          </tr>
+          <tr>
+            <td>龙鳞果(千年)</td>
+            <td class="price">25,000 灵石</td>
+            <td>3:10:45</td>
+            <td class="hot">67次竞拍 ⚡</td>
+          </tr>
+          <tr>
+            <td>补天丹 ×1</td>
+            <td class="price">50,000 灵石</td>
+            <td>0:32:18</td>
+            <td class="hot">102次竞拍 🔥</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="auction-balance">💎 灵石余额：25,000</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Achievements ========== -->
+<section id="achievements" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">🏆 修仙成就</h2>
+    <p class="section-sub reveal">大道无形 · 成就万千</p>
+    <div class="achieve-grid">
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">⚡</span>
+        <h4>境界之路</h4>
+        <div class="achieve-desc">突破金丹期，踏入修仙新境界</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 33%"></div></div>
+        <div class="achieve-progress-text"><span>3/9 境界</span><span>33%</span></div>
+        <span class="achieve-reward">奖励：称号 + 1000灵石</span>
+      </div>
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">⚔️</span>
+        <h4>法宝收集</h4>
+        <div class="achieve-desc">集齐10件法宝，铸造不朽神器</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 40%"></div></div>
+        <div class="achieve-progress-text"><span>4/10 法宝</span><span>40%</span></div>
+        <span class="achieve-reward">奖励：专属光环</span>
+      </div>
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">🌿</span>
+        <h4>灵药图鉴</h4>
+        <div class="achieve-desc">鉴定全部灵药，掌控天地灵草</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 50%"></div></div>
+        <div class="achieve-progress-text"><span>4/8 灵药</span><span>50%</span></div>
+        <span class="achieve-reward">奖励：炼丹经验+20%</span>
+      </div>
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">🗺️</span>
+        <h4>副本征服</h4>
+        <div class="achieve-desc">通关血色禁地与虚天殿全部BOSS</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 15%"></div></div>
+        <div class="achieve-progress-text"><span>1/7 副本</span><span>15%</span></div>
+        <span class="achieve-reward">奖励：稀有材料箱</span>
+      </div>
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">💕</span>
+        <h4>仙缘社交</h4>
+        <div class="achieve-desc">结交50位仙友，结为道侣</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 20%"></div></div>
+        <div class="achieve-progress-text"><span>10/50 仙友</span><span>20%</span></div>
+        <span class="achieve-reward">奖励：羁绊技能</span>
+      </div>
+      <div class="achieve-card reveal">
+        <span class="achieve-icon">📜</span>
+        <h4>传奇故事</h4>
+        <div class="achieve-desc">完成全部十卷剧情，成就大道无尽</div>
+        <div class="achieve-progress"><div class="achieve-progress-bar" style="width: 10%"></div></div>
+        <div class="achieve-progress-text"><span>1/10 卷</span><span>10%</span></div>
+        <span class="achieve-reward">奖励：称号"大道无尽"</span>
+      </div>
+    </div>
+
+    <!-- Titles -->
+    <h3 class="section-title reveal" style="font-size:1.5rem; margin-top:60px;">🏅 称号体系</h3>
+    <div class="title-grid reveal">
+      <div class="title-card">
+        <div class="title-name">山村少年</div>
+        <div class="title-condition">完成第一卷</div>
+        <div class="title-bonus">全属性+5%</div>
+      </div>
+      <div class="title-card">
+        <div class="title-name">黄枫谷弟子</div>
+        <div class="title-condition">入门黄枫谷</div>
+        <div class="title-bonus">剑系伤害+10%</div>
+      </div>
+      <div class="title-card">
+        <div class="title-name">血色猎人</div>
+        <div class="title-condition">首通血色禁地</div>
+        <div class="title-bonus">灵药收获+20%</div>
+      </div>
+      <div class="title-card">
+        <div class="title-name">虚天之主</div>
+        <div class="title-condition">获得虚天鼎</div>
+        <div class="title-bonus">冰系防御+30%</div>
+      </div>
+      <div class="title-card">
+        <div class="title-name">飞升者</div>
+        <div class="title-condition">飞升灵界</div>
+        <div class="title-bonus">全属性+25%</div>
+      </div>
+      <div class="title-card">
+        <div class="title-name">大道无尽</div>
+        <div class="title-condition">完成全部十卷</div>
+        <div class="title-bonus">全属性+50%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Rank ========== -->
+<section id="rank" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">🏆 境界排行榜</h2>
+    <p class="section-sub reveal">仙缘大陆 · 强者为尊</p>
+    <div class="rank-list reveal">
+      <div class="rank-item">
+        <div class="rank-num">1</div>
+        <div class="rank-info">
+          <div class="rank-name">向之礼</div>
+          <div class="rank-realm">化神期</div>
+        </div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:99%"></div></div>
+        <div class="rank-pct">99%</div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-num">2</div>
+        <div class="rank-info">
+          <div class="rank-name">韩立</div>
+          <div class="rank-realm">金丹期</div>
+        </div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:85%"></div></div>
+        <div class="rank-pct">85%</div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-num">3</div>
+        <div class="rank-info">
+          <div class="rank-name">南宫婉</div>
+          <div class="rank-realm">元婴期</div>
+        </div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:80%"></div></div>
+        <div class="rank-pct">80%</div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-num">4</div>
+        <div class="rank-info">
+          <div class="rank-name">墨大夫</div>
+          <div class="rank-realm">金丹期</div>
+        </div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:55%"></div></div>
+        <div class="rank-pct">55%</div>
+      </div>
+      <div class="rank-item">
+        <div class="rank-num">5</div>
+        <div class="rank-info">
+          <div class="rank-name">呼言老道</div>
+          <div class="rank-realm">元婴期</div>
+        </div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:50%"></div></div>
+        <div class="rank-pct">50%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Social ========== -->
+<section id="social" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">💬 仙友传音</h2>
+    <p class="section-sub reveal">修仙路远 · 道友同行</p>
+    <div class="chat-demo reveal">
+      <div class="chat-header">
+        <span>💬 南宫婉</span>
+        <span style="color:var(--text-muted); font-size:0.85rem">在线</span>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-msg">
+          <div class="chat-avatar">🌙</div>
+          <div class="chat-bubble">韩兄，虚天殿即将开启，你可要同行？</div>
+        </div>
+        <div class="chat-msg self">
+          <div class="chat-avatar">⚔️</div>
+          <div class="chat-bubble">虚天殿危机四伏，南宫姑娘还需多加小心。</div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avatar">🌙</div>
+          <div class="chat-bubble">有韩兄在，婉儿自是安心。听闻此殿内藏虚天鼎，乃上古至宝。</div>
+        </div>
+        <div class="chat-msg self">
+          <div class="chat-avatar">⚔️</div>
+          <div class="chat-bubble">虚天鼎确非凡物，但逆星盟也盯着此宝，此行凶险。</div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avatar">🌙</div>
+          <div class="chat-bubble">那便同行吧。你我联手，纵有千难万险也不惧。🌸</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="输入传音内容..." />
+        <button id="chatSend">发送</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Footer ========== -->
+<footer class="footer">
+  <div class="container">
+    <p>⚔️ 凡人修仙传 · 仙缘大陆 · 网页拓展 v2.0</p>
+    <p style="margin-top:8px;">大道无尽 · 修仙无止境</p>
+  </div>
+</footer>
+
+<!-- ========== JavaScript ========== -->
+<script>
+// ===== Hero Canvas Particle System =====
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [], stars = [], meteors = [];
+  let mouse = { x: 0, y: 0 };
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Stars
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: Math.random() * 0.02 + 0.005,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  // Qi particles
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5,
+      alpha: Math.random() * 0.5 + 0.1,
+      color: Math.random() > 0.5 ? '255,215,0' : '155,89,182'
+    });
+  }
+
+  // Meteors
+  function createMeteor() {
+    if (meteors.length < 3 && Math.random() < 0.005) {
+      meteors.push({
+        x: Math.random() * w * 0.8,
+        y: -10,
+        len: Math.random() * 80 + 40,
+        speed: Math.random() * 4 + 3,
+        alpha: 1
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    // Background gradient
+    const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w*0.7);
+    grad.addColorStop(0, 'rgba(20, 10, 40, 0.3)');
+    grad.addColorStop(1, 'rgba(10, 10, 18, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Stars
+    const time = Date.now() * 0.001;
+    stars.forEach(s => {
+      const a = (Math.sin(time * s.speed * 10 + s.phase) + 1) / 2;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${a * 0.8})`;
+      ctx.fill();
+    });
+
+    // Qi particles
+    particles.forEach(p => {
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+
+      const dist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+      const interact = dist < 150 ? (150 - dist) / 150 : 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r + interact * 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color}, ${p.alpha + interact * 0.3})`;
+      ctx.fill();
+
+      if (interact > 0) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r + interact * 8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color}, ${interact * 0.15})`;
+        ctx.fill();
+      }
+    });
+
+    // Meteors
+    createMeteor();
+    meteors = meteors.filter(m => m.alpha > 0);
+    meteors.forEach(m => {
+      m.x += m.speed * 2;
+      m.y += m.speed;
+      m.alpha -= 0.01;
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.len, m.y - m.len * 0.5);
+      const g = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y - m.len * 0.5);
+      g.addColorStop(0, `rgba(255, 215, 0, ${m.alpha})`);
+      g.addColorStop(1, 'rgba(255, 215, 0, 0)');
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    });
+
+    // Tai Chi (center)
+    const tSize = Math.min(w, h) * 0.08;
+    const tX = w / 2, tY = h * 0.75;
+    ctx.save();
+    ctx.translate(tX, tY);
+    ctx.rotate(time * 0.3);
+    ctx.globalAlpha = 0.06;
+    ctx.beginPath();
+    ctx.arc(0, 0, tSize, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffd700';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, -tSize/2, tSize/2, Math.PI/2, Math.PI * 1.5);
+    ctx.fillStyle = '#0a0a12';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, tSize/2, tSize/2, -Math.PI/2, Math.PI/2);
+    ctx.fillStyle = '#ffd700';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, -tSize/2, tSize/6, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffd700';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, tSize/6 * 3, tSize/6, 0, Math.PI * 2);
+    ctx.fillStyle = '#0a0a12';
+    ctx.fill();
+    ctx.restore();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  canvas.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+})();
+
+// ===== Navigation =====
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Close nav on link click (mobile)
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// Active nav on scroll
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 100;
+  sections.forEach(sec => {
+    const top = sec.offsetTop;
+    const h = sec.offsetHeight;
+    const id = sec.getAttribute('id');
+    const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+    if (link) {
+      if (scrollY >= top && scrollY < top + h) {
+        document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    }
+  });
+});
+
+// ===== Character Tabs =====
+document.querySelectorAll('.char-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.char-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.char-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== Herb Filters =====
+document.querySelectorAll('.herb-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.herb-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.herb-card').forEach(card => {
+      if (filter === 'all' || card.dataset.rarity === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ===== Chat Send =====
+document.getElementById('chatSend').addEventListener('click', sendMessage);
+document.getElementById('chatInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const body = document.getElementById('chatBody');
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg self';
+  msg.innerHTML = `<div class="chat-avatar">⚔️</div><div class="chat-bubble">${text}</div>`;
+  body.appendChild(msg);
+  body.scrollTop = body.scrollHeight;
+  input.value = '';
+
+  // Auto reply
+  setTimeout(() => {
+    const replies = [
+      '韩兄所言极是，修仙路上还需谨慎行事。',
+      '此地灵气浓郁，正适合修炼。',
+      '听闻前方有上古遗迹，可要一探？',
+      '韩兄的青元剑诀又精进了呢！',
+      '修仙修仙，贵在持之以恒。',
+      '前方妖兽出没，小心为上。',
+      '这株灵药年份不浅，正好炼丹所用。',
+      '韩兄，来日方长，后会有期。🌸'
+    ];
+    const reply = replies[Math.floor(Math.random() * replies.length)];
+    const rMsg = document.createElement('div');
+    rMsg.className = 'chat-msg';
+    rMsg.innerHTML = `<div class="chat-avatar">🌙</div><div class="chat-bubble">${reply}</div>`;
+    body.appendChild(rMsg);
+    body.scrollTop = body.scrollHeight;
+  }, 800 + Math.random() * 1200);
+}
+
+// ===== Quote Rotation =====
+const quotes = [
+  { text: '"修仙修仙，若是没了那颗向道之心，即使修为再高，也不过是一具行尸走肉。"', author: '— 韩立' },
+  { text: '"修仙界弱肉强食，只有活着，才是最大的道理。"', author: '— 墨大夫' },
+  { text: '"天道酬勤，但更要天命所归。掌天瓶在手，我不信命。"', author: '— 韩立（灵界篇）' },
+  { text: '"飞升之路，万中无一。向某不才，愿为天下修士试一试。"', author: '— 向之礼' },
+  { text: '"轮回尽头，你我终会相见。"', author: '— 南宫婉' }
+];
+let quoteIdx = 0;
+setInterval(() => {
+  quoteIdx = (quoteIdx + 1) % quotes.length;
+  const qt = document.getElementById('quote-text');
+  const qa = document.getElementById('quote-author');
+  qt.style.opacity = 0;
+  qa.style.opacity = 0;
+  setTimeout(() => {
+    qt.textContent = quotes[quoteIdx].text;
+    qa.textContent = quotes[quoteIdx].author;
+    qt.style.opacity = 1;
+    qa.style.opacity = 1;
+  }, 400);
+}, 5000);
+
+// ===== Scroll Reveal =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== Realm Card Click Effect =====
+document.querySelectorAll('.realm-card').forEach(card => {
+  card.addEventListener('click', () => {
+    card.style.boxShadow = '0 0 40px rgba(255,215,0,0.3)';
+    setTimeout(() => card.style.boxShadow = '', 800);
+  });
+});
+
+// ===== Treasure Card 3D Tilt =====
+document.querySelectorAll('.treasure-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+</script>
+</body>
+</html>
