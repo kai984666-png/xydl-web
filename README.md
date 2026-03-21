@@ -10,7 +10,7 @@
 [![Zustand](https://img.shields.io/badge/Zustand-5.0-brown)](https://zustand-demo.pmnd.rs/)
 [![Deploy](https://img.shields.io/badge/Vercel-Deployed-000?logo=vercel&logoColor=white)](https://app-rho-five-25.vercel.app)
 
-[在线体验](https://app-rho-five-25.vercel.app) | [功能一览](#-功能系统) | [快速开始](#-快速开始) | [项目结构](#-项目结构)
+[在线体验](https://xydl-web.vercel.app) | [功能一览](#-功能系统) | [快速开始](#-快速开始) | [项目结构](#-项目结构)
 
 <img src="app/public/preview.png" alt="仙缘大陆预览" width="800" />
 
